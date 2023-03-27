@@ -1,0 +1,52 @@
+*{
+    text-align: center;
+}
+h3,#time,div,p,input{
+    font-family: 'Bungee', cursive;
+}
+h1{
+    font-family: 'Bungee Shade';
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+select {
+    height: 5vh;
+  }
+h3{ 
+    font-size: 1em;
+    box-sizing: border-box;
+    margin: 0;
+
+}
+#time{
+    margin: 0;
+}
+div, p,#time{
+    line-height: 5px; 
+}
+label{
+    font-size: 0.7em;
+}
+p{
+    font-size: 0.6em;
+}
+input{
+    margin-top: 3vh;
+    border: none;
+    border-radius: 10px;
+    color: rgb(255, 253, 250);
+    width: 20vw;
+    height: 8vh;
+    background-color: black;   
+}
+
+#text{
+    text-transform: uppercase;
+    font-family:sans-serif;
+    color: white;
+    font-size: 1.5em;
+    position: absolute;
+    top: 82%;
+    width: 100%;
+   
+}
