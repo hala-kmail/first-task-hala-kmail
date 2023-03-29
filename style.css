@@ -9,9 +9,9 @@ h1{
     margin-bottom: 0;
     padding-bottom: 0;
 }
-select {
+select{
     height: 5vh;
-  }
+}
 h3{ 
     font-size: 1em;
     box-sizing: border-box;
