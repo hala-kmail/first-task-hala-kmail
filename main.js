@@ -1,12 +1,14 @@
 
 //-------------------------------------- Time -------------------------------------------------------------------//
 setInterval(updateTime, 1000);
+
+
 function updateTime() {
-    var currentTime = new Date();
-    var hours = currentTime.getHours();
-    var minutes = currentTime.getMinutes();
-    var seconds = currentTime.getSeconds();
-    var ampm = hours >= 12 ? 'PM!' : 'AM!';
+    let currentTime = new Date();
+    let hours = currentTime.getHours();
+    let minutes = currentTime.getMinutes();
+    let seconds = currentTime.getSeconds();
+    let ampm = hours >= 12 ? 'PM!' : 'AM!';
     hours = hours % 12;
     hours = hours ? hours : 12; // لما الساعة 0 يعني 12 بالليل 
     minutes = minutes < 10 ? '0'+minutes : minutes;
@@ -15,171 +17,168 @@ function updateTime() {
     document.getElementById("time").innerHTML = strTime;
 }
 //----------------------------------- default picture (am or pm) -----------------------------------------------//
-var Time = new Date();
-var h = Time.getHours();
-var pic=document.getElementById("pic");
-var txt=document.getElementById("text");
-default_pic();
-function default_pic(){
+const Cat_Act = {
+    "sleep":{"picture":"images/sleeping.jpg","text":"Sleeping!!"} ,
+    "morning":{"picture":"images/good-morning.jpeg","text":"Good morning!!"} ,
+    "evening":{"picture":"images/good-evning.jpg","text":"Good evening!!"} ,
+    "lunch":{"picture":"images/food-time.jpg","text":"let\'s have some lunch !!"} ,
+    "party":{"picture":"images/party-Time.jpg","text":"let\'s party!!"} ,
+    "sleep-tight":{"picture":"images/sleep.jpg","text":"sleep tight!!"} ,
+    "wakeUp":{"picture":"images/wake-up.jpg","text":"WAKE UP!!"} , 
+    
+  };
+//************************************************************** */
+let Time = new Date();
+let h = Time.getHours();
+let Cat_Picture =document.getElementById("pic");
+let txt=document.getElementById("text");
+//************************************************************* */
 
+const SetCatAct =(index) =>{
+    Cat_Picture.src=Cat_Act[index]["picture"];
+    txt.innerHTML=Cat_Act[index]["text"];   
+}
+
+const default_Cat_Picture=()=>{
 if(h>=12 && h<20){         //من الساعة 12 ظهرا حتى 8 مساء --مساء الخير  
-pic.src="images/good-evning.jpg";
-txt.innerHTML='"Good evening!!"';
+SetCatAct("evening");
 }
 else if(h>=5 && h<12){       //من االساعة 5 صباحا حتى 12 ظهرا -صباح الخير
-pic.src="images/good-morning.jpeg";
-txt.innerHTML='"Good morning!!"';
+    SetCatAct("morning");
 }
 else if(h>=20 ||h<=5){      // من الساعة 8 مساءا حتى الخامسة صباحا --موعد نوم القطة
-   
-    pic.src="images/sleeping.jpg";
-    txt.innerHTML='"sleeping!!"';
+   SetCatAct("sleep");
     }
 }
+default_Cat_Picture();
+let Pre_Picture_src=Cat_Picture.src;
+let Pre_Picture_text=txt.innerHTML;
 //-------------------------------------------------------------selection lists------------------------------------------------------//
-set_wakeup_time();
-function set_wakeup_time(){
-    let data="";
+
+const Set_Selectors_Time=()=>{
+    let Am_time="";
+    let Pm_time="";
     for(let i=1;i<=11;i++){
         if(i<11){
-           data+=`
+           Am_time+=`
         <option value="${i}">${i}AM-${i+1}AM</option>
         `  
-        }
-        else{ //عندما تصبح الساعة من 11 الى 12 ومن 12 صباحا الى 1 مساء
-            data+=`
-        <option value="${i}">${i}AM-${i+1}PM</option>
-        <option value="${i+1}">${i+1}PM-${1}PM</option>
-        `    
-        }
-       
-    }
-    for(let i=1;i<=11;i++){
-        if(i<11){
-           data+=`
+        Pm_time+=`
         <option value="${i+12}">${i}PM-${i+1}PM</option>
         
-        `  
+        ` 
         }
-        else{
-            data+=`
+        else{ //عندما تصبح الساعة من 11 الى 12 ومن 12 صباحا الى 1 مساء
+            Am_time+=`
+        <option value="${i}">${i}AM-${i+1}PM</option>
+        <option value="${i+1}">${i+1}PM-${1}PM</option>
+        `  
+        Pm_time+=`
         <option value="${i+12}">${i}PM-${i+1}AM</option>
         <option value="${0}">${i+1}AM-${1}AM</option>  
-        `    
+        `   
         }
        
     }
+   
    const selects= document.querySelectorAll("#wake-times, #lunch-times, #sleep-times");
    selects.forEach((select) => {
-    select.innerHTML=data;
+    select.innerHTML=Am_time+Pm_time;
     });
 
 }
+Set_Selectors_Time();
 //------------------------------------------------------------------------party time overriding-------------------------------------------
 
-let clicked=document.getElementById("click");
-let c=0;
-clicked.addEventListener("click",change);
-
-function change(){
-c++;
-if(c%2!=0){
+const Party_Time=()=>{
+    Clicks+=1;
+if(Clicks%2!=0){
 clicked.value="party over!";
-pic.src="images/party-Time.jpg";
-txt.innerHTML='"let\'s party!!"';
+SetCatAct("party");
 clicked.style.cssText="background-color:#207df4"; 
 }
 else{
 clicked.value="party time!"; 
-pic.src=str;
-txt.innerHTML=default_text;
+Cat_Picture.src=Pre_Picture_src;
+txt.innerHTML=Pre_Picture_text;
 clicked.style.cssText="background-color:black";
 }
 }
+
+
+
+let clicked=document.getElementById("click");
+let Clicks=0;
+clicked.addEventListener("click",Party_Time);
+
 //---------------------------------------------------------------------lets start the game----------------------------------------
-var srt="";
-var default_text="";
-
-const selects = document.querySelectorAll("#wake-times, #lunch-times, #sleep-times");
-selects.forEach((select) => {
-select.addEventListener("change", handleSelectChange);
-});
 
 
-function handleSelectChange(event) {
+
+const handleSelectChange=(event)=> {
     const selectedValue = event.target.value;//    الذي تم اختياره (الوقت)option 
     const selectedId = event.target.id; //عند اي سيليكتر حدث التغيير
-    let op1=document.getElementById("wake-times");
-    let op2=document.getElementById("lunch-times");
-    let op3=document.getElementById("sleep-times");
-    let party_img=document.querySelector("img");
-var s=op1.value;
-var s2=op2.value;
-var s3=op3.value;
+    let wakeUpTimeValue=document.getElementById("wake-times").value;
+    let lunchTimeValue=document.getElementById("lunch-times").value;
+    let sleepTimeValue=document.getElementById("sleep-times").value;
+
   
 if(selectedId=="wake-times"){
 if(selectedValue==h){
-party_img.src="images/wake-up.jpg";
-
-txt.innerHTML='"WAKE UP!!"'; 
+ SetCatAct("wakeUp"); 
 }
-else if(s2==h){
-    party_img.src="images/food-time.jpg";
-    txt.innerHTML='"let\'s have some lunch !!"';    
+else if(lunchTimeValue==h){
+    SetCatAct("lunch");    
 }
-else if(s3==h){
-    party_img.src="images/sleep.jpg";
-    txt.innerHTML='"sleep tight!!"';     
+else if(sleepTimeValue==h){
+     SetCatAct("sleep-tight");    
 }
 else{
-    default_pic();
+    default_Cat_Picture();
 }
-
 }
 
 
 
 else if(selectedId=="lunch-times" ){
-if(selectedValue==h && s!=h){
-  party_img.src="images/food-time.jpg"; 
-  txt.innerHTML='"let\'s have some lunch !!"';   
+if(selectedValue==h && wakeUpTimeValue!=h){
+    SetCatAct("lunch");    
 } 
-else if(s==h){
-    party_img.src="images/wake-up.jpg"; 
-    txt.innerHTML='"WAKE UP!!"'; 
+else if(wakeUpTimeValue==h){
+    SetCatAct("wakeUp"); 
 }
-else if(s3==h){
-    party_img.src="images/sleep.jpg";  
-    txt.innerHTML='"sleep tight!!"';   
+else if(sleepTimeValue==h){
+    SetCatAct("sleep-tight");   
 }
 else{
-   default_pic();
+    default_Cat_Picture();
 }
 
 }
 
 
  else if( selectedId=="sleep-times"){
-    if(selectedValue==h && s!=h && s2!=h){
-        party_img.src="images/sleep.jpg"; 
-        txt.innerHTML='"sleep tight!!"';    
+    if(selectedValue==h && wakeUpTimeValue!=h && lunchTimeValue!=h){
+        SetCatAct("sleep-tight");    
     } 
-    else if(s==h){
-        party_img.src="images/wake-up.jpg";
-        txt.innerHTML='"WAKE UP!!"';  
+    else if(wakeUpTimeValue==h){
+        SetCatAct("wakeUp");   
     }
-    else if(s2==h){
-        party_img.src="images/food-time.jpg"; 
-        txt.innerHTML='"let\'s have some lunch !!"';
+    else if(lunchTimeValue==h){
+        SetCatAct("lunch"); 
             }
     else{
-       default_pic(); 
+        default_Cat_Picture();
     }
 
      }
 
 
-     str=party_img.src;
-     default_text=txt.innerHTML;
+     Pre_Picture_src=Cat_Picture.src;
+     Pre_Picture_text=txt.innerHTML;
 
 }
+const selects = document.querySelectorAll("#wake-times, #lunch-times, #sleep-times");
+selects.forEach((select) => {
+select.addEventListener("change", handleSelectChange);
+});
